@@ -1,5 +1,4 @@
-// src/context/AuthContext.tsx
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext,useEffect, useState } from "react";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -14,7 +13,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load from localStorage when the app starts
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(storedUser);
@@ -45,11 +43,5 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// Custom hook for easier usage
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
+// export context for useAuth
+export default AuthContext;
