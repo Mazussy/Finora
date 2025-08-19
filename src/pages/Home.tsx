@@ -25,7 +25,7 @@ const Home: React.FC = () => {
             Monitor your spending, track your income, and achieve your financial goals with ease.
           </p>
           <div className="flex gap-6 justify-center">
-            <Link to="/login">
+            <Link to="/login?mode=signup">
               <Button 
                 size="lg" 
                 className="font-semibold px-8 py-4 text-lg"

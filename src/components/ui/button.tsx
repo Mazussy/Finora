@@ -10,16 +10,16 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-[#eeeeee] text-black shadow-xs hover:bg-[#dddddd] [&_svg]:text-black",
+          "bg-[#eeeeee] text-black shadow-xs hover:bg-[#c0c0c0] hover:text-black [&_svg]:text-black",
         destructive:
-          "bg-red-500 text-white shadow-xs hover:bg-red-600 focus-visible:ring-red-500/20 [&_svg]:text-white",
+          "bg-red-500 text-white shadow-xs hover:bg-red-600 hover:text-white focus-visible:ring-red-500/20 [&_svg]:text-white",
         outline:
-          "border border-[#eeeeee] bg-transparent text-[#eeeeee] shadow-xs hover:bg-[#eeeeee] hover:text-black [&_svg]:text-[#eeeeee] hover:[&_svg]:text-black",
+          "border border-input bg-transparent text-foreground shadow-xs hover:bg-[#eeeeee] hover:text-black [&_svg]:text-foreground hover:[&_svg]:text-black",
         secondary:
-          "bg-[#eeeeee] text-black shadow-xs hover:bg-[#dddddd] [&_svg]:text-black",
+          "bg-[#eeeeee] text-black shadow-xs hover:bg-[#c0c0c0] hover:text-black [&_svg]:text-black",
         ghost:
-          "hover:bg-[#eeeeee] hover:text-black [&_svg]:text-[#eeeeee] hover:[&_svg]:text-black",
-        link: "text-[#eeeeee] underline-offset-4 hover:underline [&_svg]:text-[#eeeeee]",
+          "bg-transparent text-foreground hover:bg-[#eeeeee] hover:text-black [&_svg]:text-foreground hover:[&_svg]:text-black",
+        link: "text-foreground underline-offset-4 hover:underline hover:text-foreground [&_svg]:text-foreground",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
