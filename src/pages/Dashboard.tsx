@@ -3,9 +3,12 @@ import { useTransactions } from "../hooks/useTransaction";
 import TransactionForm from "../components/TransactionForm";
 import TransactionList from "../components/TransactionList";
 import TransactionChart from "../components/TransactionChart";
+import { QuickStats } from "../components/stats/QuickStats";
+import { ExpensePieChart } from "../components/charts/ExpensePieChart";
+import { RecentActivity } from "../components/activity/RecentActivity";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, Wallet, LogOut, User } from "lucide-react";
+import { LogOut, User, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
@@ -22,126 +25,70 @@ export default function Dashboard() {
     }
   };
 
-  // Calculate statistics
-  const income = transactions
-    .filter((t) => t.amount > 0)
-    .reduce((acc, t) => acc + t.amount, 0);
-
-  const expense = transactions
-    .filter((t) => t.amount < 0)
-    .reduce((acc, t) => acc + t.amount, 0);
-
-  const balance = income + expense;
-
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #222831 0%, #393E46 100%)' }}>
-      <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto p-6 space-y-6 animate-fade-in">
         {/* Header */}
-        <div className="flex justify-between items-center rounded-2xl p-6" style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
+        <div className="flex justify-between items-center bg-card border rounded-lg p-6">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-xl" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
-              <User className="h-6 w-6 text-white" />
+            <div className="p-3 bg-primary/10 rounded-xl">
+              <User className="h-6 w-6 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold" style={{ color: '#EEEEEE' }}>
-                Welcome back, {user?.email || "Guest"}!
+              <h1 className="text-2xl font-bold text-foreground">
+                Welcome back, {user?.displayName || user?.email?.split('@')[0] || "Guest"}!
               </h1>
-              <p style={{ color: '#EEEEEE' }}>
-                Manage your finances with ease
+              <p className="text-muted-foreground">
+                Track your finances with intelligence
               </p>
             </div>
           </div>
           <Button 
             variant="outline" 
             onClick={handleLogout}
-            className="flex items-center gap-2"
-            style={{ 
-              borderColor: '#00ADB5', 
-              color: '#00ADB5',
-              backgroundColor: 'transparent'
-            }}
+            className="flex items-center gap-2 hover:bg-destructive hover:text-destructive-foreground transition-colors"
           >
             <LogOut className="h-4 w-4" />
             Logout
           </Button>
         </div>
 
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium" style={{ color: '#EEEEEE' }}>
-                  Total Balance
-                </CardTitle>
-                <Wallet className="h-4 w-4" style={{ color: '#00ADB5' }} />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold" style={{ color: '#EEEEEE' }}>
-                ${balance.toFixed(2)}
-              </div>
-              <p className="text-sm mt-1" style={{ color: '#EEEEEE' }}>
-                {balance >= 0 ? "You're doing great!" : "Time to save more"}
-              </p>
-            </CardContent>
-          </Card>
+        {/* Quick Stats */}
+        <QuickStats transactions={transactions} />
 
-          <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium" style={{ color: '#EEEEEE' }}>
-                  Total Income
-                </CardTitle>
-                <TrendingUp className="h-4 w-4 text-green-400" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-green-400">
-                +${income.toFixed(2)}
-              </div>
-              <p className="text-sm mt-1" style={{ color: '#EEEEEE' }}>
-                {transactions.filter(t => t.amount > 0).length} income sources
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
-            <CardHeader className="pb-2">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium" style={{ color: '#EEEEEE' }}>
-                  Total Expenses
-                </CardTitle>
-                <TrendingDown className="h-4 w-4 text-red-400" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-red-400">
-                ${expense.toFixed(2)}
-              </div>
-              <p className="text-sm mt-1" style={{ color: '#EEEEEE' }}>
-                {transactions.filter(t => t.amount < 0).length} expense categories
-              </p>
-            </CardContent>
-          </Card>
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 xl:grid-cols-1 gap-6">
+          <ExpensePieChart transactions={transactions} />
         </div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Transaction Form */}
-          <div className="lg:col-span-1">
-            <TransactionForm />
+          {/* Left Column - Transaction Form and Recent Activity */}
+          <div className="space-y-6">
+            <Card className="bg-card border animate-fade-in-up">
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-foreground">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  Add Transaction
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <TransactionForm />
+              </CardContent>
+            </Card>
+            
+            <RecentActivity transactions={transactions} />
           </div>
 
-          {/* Transaction List */}
+          {/* Right Column - Transaction List */}
           <div className="lg:col-span-2">
             <TransactionList />
           </div>
         </div>
 
-        {/* Chart Section */}
+        {/* Legacy Chart (for now) */}
         {transactions.length > 0 && (
-          <div className="mt-6">
+          <div className="animate-fade-in-up">
             <TransactionChart />
           </div>
         )}

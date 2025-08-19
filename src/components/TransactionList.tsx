@@ -21,21 +21,21 @@ export default function TransactionList() {
 
   if (loading) {
     return (
-      <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
+      <Card className="bg-card border">
         <CardHeader>
-          <CardTitle className="text-xl flex items-center gap-2" style={{ color: '#EEEEEE' }}>
-            <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
-              <Receipt className="h-4 w-4 text-white" />
+          <CardTitle className="text-xl flex items-center gap-2 text-foreground">
+            <div className="p-2 bg-primary rounded-lg">
+              <Receipt className="h-4 w-4 text-primary-foreground" />
             </div>
             Loading Transactions...
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-12">
-            <div className="p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center animate-pulse" style={{ backgroundColor: '#222831' }}>
-              <Receipt className="h-8 w-8" style={{ color: '#00ADB5' }} />
+            <div className="p-4 bg-secondary rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center animate-pulse">
+              <Receipt className="h-8 w-8 text-primary" />
             </div>
-            <p style={{ color: '#EEEEEE' }}>Loading your transactions...</p>
+            <p className="text-foreground">Loading your transactions...</p>
           </div>
         </CardContent>
       </Card>
@@ -44,10 +44,10 @@ export default function TransactionList() {
 
   if (transactions.length === 0) {
     return (
-      <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
+      <Card className="bg-card border">
         <CardHeader>
-          <CardTitle className="text-xl flex items-center gap-2" style={{ color: '#EEEEEE' }}>
-            <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #FD7014 0%, #ff8c42 100%)' }}>
+          <CardTitle className="text-xl flex items-center gap-2 text-foreground">
+            <div className="p-2 bg-orange-500 rounded-lg">
               <Receipt className="h-4 w-4 text-white" />
             </div>
             All Transactions
@@ -55,11 +55,11 @@ export default function TransactionList() {
         </CardHeader>
         <CardContent>
           <div className="text-center py-12">
-            <div className="p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#222831' }}>
-              <Receipt className="h-8 w-8" style={{ color: '#00ADB5' }} />
+            <div className="p-4 bg-secondary rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+              <Receipt className="h-8 w-8 text-primary" />
             </div>
-            <p className="mb-2 text-lg" style={{ color: '#EEEEEE' }}>No transactions found</p>
-            <p style={{ color: '#EEEEEE' }}>Add your first transaction using the form on the left!</p>
+            <p className="mb-2 text-lg text-foreground">No transactions found</p>
+            <p className="text-muted-foreground">Add your first transaction using the form on the left!</p>
           </div>
         </CardContent>
       </Card>
@@ -67,14 +67,14 @@ export default function TransactionList() {
   }
 
   return (
-    <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
+    <Card className="bg-card border">
       <CardHeader>
-        <CardTitle className="text-xl flex items-center gap-2" style={{ color: '#EEEEEE' }}>
-          <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
-            <Receipt className="h-4 w-4 text-white" />
+        <CardTitle className="text-xl flex items-center gap-2 text-foreground">
+          <div className="p-2 bg-primary rounded-lg">
+            <Receipt className="h-4 w-4 text-primary-foreground" />
           </div>
           All Transactions
-          <Badge variant="secondary" className="ml-auto" style={{ backgroundColor: '#222831', color: '#EEEEEE' }}>
+          <Badge variant="secondary" className="ml-auto">
             {transactions.length}
           </Badge>
         </CardTitle>
@@ -83,7 +83,7 @@ export default function TransactionList() {
         <div className="space-y-4 max-h-96 overflow-y-auto">
           {transactions.map((t, index) => (
             <div key={t.id}>
-              <div className="flex items-center justify-between group hover:bg-black/20 p-3 rounded-lg transition-colors">
+              <div className="flex items-center justify-between group hover:bg-accent p-3 rounded-lg transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={`p-2 rounded-lg ${t.amount > 0 ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
                     {t.amount > 0 ? 
@@ -93,7 +93,7 @@ export default function TransactionList() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium" style={{ color: '#EEEEEE' }}>{t.description}</span>
+                      <span className="font-medium text-foreground">{t.description}</span>
                       <Badge 
                         variant={t.amount > 0 ? "default" : "destructive"}
                         className={`text-xs ${
@@ -105,7 +105,7 @@ export default function TransactionList() {
                         {t.amount > 0 ? "Income" : "Expense"}
                       </Badge>
                     </div>
-                    <p className="text-sm" style={{ color: '#EEEEEE' }}>{t.date}</p>
+                    <p className="text-sm text-muted-foreground">{t.date}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -127,7 +127,7 @@ export default function TransactionList() {
                 </div>
               </div>
               {index < transactions.length - 1 && (
-                <Separator style={{ backgroundColor: '#222831' }} />
+                <Separator className="bg-border" />
               )}
             </div>
           ))}

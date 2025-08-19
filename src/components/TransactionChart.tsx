@@ -57,8 +57,8 @@ export default function TransactionChart() {
   const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     if (active && payload && payload.length) {
       return (
-        <div className="rounded-lg p-3 shadow-lg" style={{ backgroundColor: '#393E46', borderColor: '#222831' }}>
-          <p className="text-sm" style={{ color: '#EEEEEE' }}>{`Date: ${label}`}</p>
+        <div className="bg-card border rounded-lg p-3 shadow-lg">
+          <p className="text-sm text-foreground">{`Date: ${label}`}</p>
           {payload.map((entry, index: number) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
               {`${entry.dataKey === 'income' ? 'Income' : entry.dataKey === 'expense' ? 'Expense' : 'Net'}: $${entry.value.toFixed(2)}`}
@@ -71,11 +71,11 @@ export default function TransactionChart() {
   };
 
   return (
-    <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
+    <Card className="bg-card border">
       <CardHeader>
-        <CardTitle className="text-xl flex items-center gap-2" style={{ color: '#EEEEEE' }}>
-          <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
-            <TrendingUp className="h-4 w-4 text-white" />
+        <CardTitle className="text-xl flex items-center gap-2 text-foreground">
+          <div className="p-2 bg-primary rounded-lg">
+            <TrendingUp className="h-4 w-4 text-primary-foreground" />
           </div>
           Financial Overview
         </CardTitle>
@@ -94,14 +94,14 @@ export default function TransactionChart() {
                   <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#222831" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis 
                 dataKey="date" 
-                stroke="#EEEEEE"
+                stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
               />
               <YAxis 
-                stroke="#EEEEEE"
+                stroke="hsl(var(--muted-foreground))"
                 fontSize={12}
                 tickFormatter={(value) => `$${value}`}
               />

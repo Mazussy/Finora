@@ -59,45 +59,40 @@ export default function Login() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #222831 0%, #393E46 100%)' }}>
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="p-4 rounded-2xl mb-4 mx-auto w-fit" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
-            <Wallet className="h-8 w-8 text-white animate-pulse" />
+          <div className="p-4 bg-primary rounded-2xl mb-4 mx-auto w-fit">
+            <Wallet className="h-8 w-8 text-primary-foreground animate-pulse" />
           </div>
-          <p style={{ color: '#EEEEEE' }}>Loading...</p>
+          <p className="text-foreground">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'linear-gradient(135deg, #222831 0%, #393E46 100%)' }}>
+    <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-6">
-            <div className="p-4 rounded-2xl" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
-              <Wallet className="h-8 w-8 text-white" />
+            <div className="p-4 bg-primary rounded-2xl">
+              <Wallet className="h-8 w-8 text-primary-foreground" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold mb-2" style={{ 
-            background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}>
+          <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
             Welcome to Finora
           </h1>
-          <p style={{ color: '#EEEEEE' }}>Sign in to manage your finances</p>
+          <p className="text-muted-foreground">Sign in to manage your finances</p>
         </div>
 
         {/* Login Card */}
-        <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
+        <Card className="bg-card border">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-xl text-center" style={{ color: '#EEEEEE' }}>
+            <CardTitle className="text-xl text-center text-foreground">
               {isSignUp ? "Create Account" : "Sign In"}
             </CardTitle>
-            <p className="text-center text-sm" style={{ color: '#EEEEEE' }}>
+            <p className="text-center text-sm text-muted-foreground">
               {isSignUp ? "Join Finora to start tracking your finances" : "Welcome back to Finora"}
             </p>
           </CardHeader>
@@ -110,55 +105,42 @@ export default function Login() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" style={{ color: '#EEEEEE' }}>
+                <Label htmlFor="email" className="text-foreground">
                   Email
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: '#00ADB5' }} />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    style={{ 
-                      backgroundColor: '#222831', 
-                      borderColor: '#222831', 
-                      color: '#EEEEEE',
-                      paddingLeft: '2.5rem'
-                    }}
-                    className="placeholder:text-gray-400 focus:border-cyan-500"
+                    className="bg-input border-border text-foreground placeholder:text-muted-foreground pl-10"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" style={{ color: '#EEEEEE' }}>
+                <Label htmlFor="password" className="text-foreground">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: '#00ADB5' }} />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    style={{ 
-                      backgroundColor: '#222831', 
-                      borderColor: '#222831', 
-                      color: '#EEEEEE',
-                      paddingLeft: '2.5rem',
-                      paddingRight: '2.5rem'
-                    }}
-                    className="placeholder:text-gray-400 focus:border-cyan-500"
+                    className="bg-input border-border text-foreground placeholder:text-muted-foreground pl-10 pr-10"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -168,8 +150,7 @@ export default function Login() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full text-white font-medium py-2.5"
-                style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}
+                className="w-full"
               >
                 {isSubmitting ? "Processing..." : (isSignUp ? "Create Account" : "Sign In")}
               </Button>
@@ -181,8 +162,7 @@ export default function Login() {
                     setIsSignUp(!isSignUp);
                     setError("");
                   }}
-                  className="text-sm hover:underline"
-                  style={{ color: '#00ADB5' }}
+                  className="text-sm text-primary hover:underline"
                 >
                   {isSignUp ? "Already have an account? Sign in" : "Don't have an account? Sign up"}
                 </button>
@@ -196,8 +176,7 @@ export default function Login() {
           <Link to="/">
             <Button 
               variant="ghost" 
-              style={{ color: '#EEEEEE' }}
-              className="hover:bg-black/20"
+              className="text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home

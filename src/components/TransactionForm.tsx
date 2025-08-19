@@ -3,22 +3,23 @@ import { useTransactions } from "../hooks/useTransaction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, DollarSign } from "lucide-react";
+import { DollarSign } from "lucide-react";
+import { DEFAULT_CATEGORIES } from "../types/categories";
 
 export default function TransactionForm() {
   const { addTransaction } = useTransactions();
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState<"income" | "expense">("expense");
+  const [categoryId, setCategoryId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted with:", { description, amount, type });
+    console.log("Form submitted with:", { description, amount, type, categoryId });
     
-    if (!description.trim() || !amount.trim()) {
+    if (!description.trim() || !amount.trim() || !categoryId) {
       alert("Please fill in all fields");
       return;
     }
@@ -37,12 +38,14 @@ export default function TransactionForm() {
         description: description.trim(),
         amount: type === "income" ? Math.abs(numericAmount) : -Math.abs(numericAmount),
         type,
+        categoryId,
         date: new Date().toISOString().split("T")[0],
       });
 
       console.log("Transaction added successfully!");
       setDescription("");
       setAmount("");
+      setCategoryId("");
       setType("expense");
     } catch (error) {
       console.error("Error adding transaction:", error);
@@ -52,91 +55,94 @@ export default function TransactionForm() {
     }
   };
 
+  const availableCategories = DEFAULT_CATEGORIES.filter(
+    cat => type === "income" ? cat.type === "income" : cat.type === "expense"
+  );
+
   return (
-    <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
-      <CardHeader>
-        <CardTitle className="text-xl flex items-center gap-2" style={{ color: '#EEEEEE' }}>
-          <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
-            <Plus className="h-4 w-4 text-white" />
-          </div>
-          Add Transaction
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="description" style={{ color: '#EEEEEE' }}>
-              Description
-            </Label>
-            <Input
-              id="description"
-              placeholder="Enter transaction description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              style={{ 
-                backgroundColor: '#222831', 
-                borderColor: '#222831', 
-                color: '#EEEEEE' 
-              }}
-              className="placeholder:text-gray-400 focus:border-orange-500"
-            />
-          </div>
+    <form onSubmit={handleSubmit} className="space-y-4 animate-fade-in-up">
+      <div className="space-y-2">
+        <Label htmlFor="description" className="text-foreground">
+          Description
+        </Label>
+        <Input
+          id="description"
+          placeholder="Enter transaction description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="bg-input border-border text-foreground placeholder:text-muted-foreground"
+        />
+      </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="type" style={{ color: '#EEEEEE' }}>
-              Type
-            </Label>
-            <Select value={type} onValueChange={(value: "income" | "expense") => setType(value)}>
-              <SelectTrigger style={{ backgroundColor: '#222831', borderColor: '#222831', color: '#EEEEEE' }}>
-                <SelectValue placeholder="Select transaction type" />
-              </SelectTrigger>
-              <SelectContent style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
-                <SelectItem value="income" className="text-green-400">
-                  Income (+)
-                </SelectItem>
-                <SelectItem value="expense" className="text-red-400">
-                  Expense (-)
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="type" className="text-foreground">
+          Type
+        </Label>
+        <Select value={type} onValueChange={(value: "income" | "expense") => {
+          setType(value);
+          setCategoryId(""); // Reset category when type changes
+        }}>
+          <SelectTrigger className="bg-input border-border text-foreground">
+            <SelectValue placeholder="Select transaction type" />
+          </SelectTrigger>
+          <SelectContent className="bg-card border-border text-foreground">
+            <SelectItem value="income" className="text-green-400 hover:bg-accent">
+              💰 Income
+            </SelectItem>
+            <SelectItem value="expense" className="text-red-400 hover:bg-accent">
+              💸 Expense
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="amount" style={{ color: '#EEEEEE' }}>
-              Amount
-            </Label>
-            <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: '#00ADB5' }} />
-              <Input
-                id="amount"
-                placeholder="0.00"
-                type="number"
-                step="0.01"
-                min="0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                style={{ 
-                  backgroundColor: '#222831', 
-                  borderColor: '#222831', 
-                  color: '#EEEEEE',
-                  paddingLeft: '2.5rem'
-                }}
-                className="placeholder:text-gray-400 focus:border-cyan-500"
-              />
-            </div>
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="category" className="text-foreground">
+          Category
+        </Label>
+        <Select value={categoryId} onValueChange={setCategoryId}>
+          <SelectTrigger className="bg-input border-border text-foreground">
+            <SelectValue placeholder="Select category" />
+          </SelectTrigger>
+          <SelectContent className="bg-card border-border text-foreground">
+            {availableCategories.map((category) => (
+              <SelectItem key={category.id} value={category.id} className="text-foreground hover:bg-accent">
+                <div className="flex items-center gap-2">
+                  <span>{category.icon}</span>
+                  <span>{category.name}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-          <Button 
-            type="submit" 
-            disabled={isSubmitting}
-            className="w-full text-white font-medium py-2.5"
-            style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            {isSubmitting ? "Adding..." : "Add Transaction"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+      <div className="space-y-2">
+        <Label htmlFor="amount" className="text-foreground">
+          Amount
+        </Label>
+        <div className="relative">
+          <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            id="amount"
+            placeholder="0.00"
+            type="number"
+            step="0.01"
+            min="0"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            className="bg-input border-border text-foreground placeholder:text-muted-foreground pl-10"
+          />
+        </div>
+      </div>
+
+      <Button 
+        type="submit" 
+        disabled={isSubmitting}
+        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
+      >
+        {isSubmitting ? "Adding..." : "Add Transaction"}
+      </Button>
+    </form>
   );
 }
