@@ -131,7 +131,7 @@ export default function TransactionForm() {
             min="0"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="bg-secondary border-border text-foreground placeholder:text-muted-foreground pl-10 focus:border-primary"
+            className="bg-secondary border-border text-foreground placeholder:text-muted-foreground pl-10 focus:border-primary no-spinners"
           />
         </div>
       </div>

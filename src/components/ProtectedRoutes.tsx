@@ -11,12 +11,12 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #222831 0%, #393E46 100%)' }}>
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="p-4 rounded-2xl mb-4 mx-auto w-fit" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
-            <Wallet className="h-8 w-8 text-white animate-pulse" />
+          <div className="p-4 bg-primary rounded-2xl mb-4 mx-auto w-fit">
+            <Wallet className="h-8 w-8 text-primary-foreground animate-pulse" />
           </div>
-          <p style={{ color: '#EEEEEE' }}>Loading...</p>
+          <p className="text-foreground">Loading...</p>
         </div>
       </div>
     );
