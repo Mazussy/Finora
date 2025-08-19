@@ -70,7 +70,7 @@ export default function TransactionForm() {
           placeholder="Enter transaction description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="bg-input border-border text-foreground placeholder:text-muted-foreground"
+          className="bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary"
         />
       </div>
 
@@ -82,14 +82,14 @@ export default function TransactionForm() {
           setType(value);
           setCategoryId(""); // Reset category when type changes
         }}>
-          <SelectTrigger className="bg-input border-border text-foreground">
+          <SelectTrigger className="bg-secondary border-border text-foreground hover:bg-accent">
             <SelectValue placeholder="Select transaction type" />
           </SelectTrigger>
-          <SelectContent className="bg-card border-border text-foreground">
-            <SelectItem value="income" className="text-green-400 hover:bg-accent">
+          <SelectContent className="bg-secondary border-border shadow-lg z-[9999] backdrop-blur-none">
+            <SelectItem value="income" className="text-green-400 hover:bg-accent focus:bg-accent cursor-pointer bg-secondary">
               💰 Income
             </SelectItem>
-            <SelectItem value="expense" className="text-red-400 hover:bg-accent">
+            <SelectItem value="expense" className="text-red-400 hover:bg-accent focus:bg-accent cursor-pointer bg-secondary">
               💸 Expense
             </SelectItem>
           </SelectContent>
@@ -101,12 +101,12 @@ export default function TransactionForm() {
           Category
         </Label>
         <Select value={categoryId} onValueChange={setCategoryId}>
-          <SelectTrigger className="bg-input border-border text-foreground">
+          <SelectTrigger className="bg-secondary border-border text-foreground hover:bg-accent">
             <SelectValue placeholder="Select category" />
           </SelectTrigger>
-          <SelectContent className="bg-card border-border text-foreground">
+          <SelectContent className="bg-secondary border-border shadow-lg z-[9999] backdrop-blur-none">
             {availableCategories.map((category) => (
-              <SelectItem key={category.id} value={category.id} className="text-foreground hover:bg-accent">
+              <SelectItem key={category.id} value={category.id} className="text-foreground hover:bg-accent focus:bg-accent cursor-pointer bg-secondary">
                 <div className="flex items-center gap-2">
                   <span>{category.icon}</span>
                   <span>{category.name}</span>
@@ -131,7 +131,7 @@ export default function TransactionForm() {
             min="0"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="bg-input border-border text-foreground placeholder:text-muted-foreground pl-10"
+            className="bg-secondary border-border text-foreground placeholder:text-muted-foreground pl-10 focus:border-primary"
           />
         </div>
       </div>
@@ -139,7 +139,7 @@ export default function TransactionForm() {
       <Button 
         type="submit" 
         disabled={isSubmitting}
-        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200"
+        className="w-full"
       >
         {isSubmitting ? "Adding..." : "Add Transaction"}
       </Button>

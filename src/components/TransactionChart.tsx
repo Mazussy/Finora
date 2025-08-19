@@ -72,18 +72,18 @@ export default function TransactionChart() {
 
   return (
     <Card className="bg-card border">
-      <CardHeader>
-        <CardTitle className="text-xl flex items-center gap-2 text-foreground">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg flex items-center gap-2 text-foreground">
           <div className="p-2 bg-primary rounded-lg">
             <TrendingUp className="h-4 w-4 text-primary-foreground" />
           </div>
           Financial Overview
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="h-80">
+      <CardContent className="pt-0">
+        <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartData}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
@@ -98,12 +98,14 @@ export default function TransactionChart() {
               <XAxis 
                 dataKey="date" 
                 stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
+                fontSize={11}
+                height={30}
               />
               <YAxis 
                 stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
+                fontSize={11}
                 tickFormatter={(value) => `$${value}`}
+                width={60}
               />
               <Tooltip content={<CustomTooltip />} />
               <Area 

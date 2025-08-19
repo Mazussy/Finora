@@ -2,12 +2,13 @@
 import { db } from "../firebase";
 import { collection, addDoc, getDocs, query, where, doc, deleteDoc, onSnapshot } from "firebase/firestore";
 
-export async function addTransaction(userId: string, amount: number, type: string, description?: string) {
+export async function addTransaction(userId: string, amount: number, type: string, description?: string, categoryId?: string) {
   await addDoc(collection(db, "transactions"), {
     userId,
     amount,
     type,
     description,
+    categoryId,
     createdAt: new Date()
   });
 }

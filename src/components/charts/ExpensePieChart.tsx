@@ -25,8 +25,8 @@ const CustomTooltip = ({ active, payload }: TooltipProps) => {
   if (active && payload && payload.length) {
     const data = payload[0];
     return (
-      <div className="bg-popover border border-border rounded-lg p-3 shadow-lg">
-        <p className="text-popover-foreground font-medium">{data.name}</p>
+      <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
+        <p className="text-foreground font-medium">{data.name}</p>
         <p className="text-primary font-bold">${data.value.toFixed(2)}</p>
       </div>
     );

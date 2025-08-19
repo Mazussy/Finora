@@ -116,7 +116,7 @@ export default function Login() {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="bg-input border-border text-foreground placeholder:text-muted-foreground pl-10"
+                    className="bg-secondary border-border text-foreground placeholder:text-muted-foreground pl-10"
                     required
                   />
                 </div>
@@ -134,7 +134,7 @@ export default function Login() {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="bg-input border-border text-foreground placeholder:text-muted-foreground pl-10 pr-10"
+                    className="bg-secondary border-border text-foreground placeholder:text-muted-foreground pl-10 pr-10"
                     required
                   />
                   <button
@@ -156,16 +156,17 @@ export default function Login() {
               </Button>
 
               <div className="text-center">
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   onClick={() => {
                     setIsSignUp(!isSignUp);
                     setError("");
                   }}
-                  className="text-sm text-primary hover:underline"
+                  className="text-sm"
                 >
                   {isSignUp ? "Already have an account? Sign in" : "Don't have an account? Sign up"}
-                </button>
+                </Button>
               </div>
             </form>
           </CardContent>

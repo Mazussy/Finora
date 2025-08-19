@@ -13,6 +13,7 @@ type FirebaseTransaction = {
   amount: number;
   type: string;
   description?: string;
+  categoryId?: string;
   createdAt?: {
     toDate?: () => Date;
   };
@@ -52,8 +53,9 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
           id: fbTransaction.id,
           description: fbTransaction.description || `${fbTransaction.type} transaction`,
           amount: fbTransaction.amount,
-          type: fbTransaction.type === "income" || fbTransaction.amount > 0 ? "income" : "expense",
+          type: fbTransaction.type as "income" | "expense",
           date: fbTransaction.createdAt?.toDate?.()?.toISOString().split("T")[0] || new Date().toISOString().split("T")[0],
+          categoryId: fbTransaction.categoryId || 'other',
         };
       });
       console.log("Formatted transactions:", formattedTransactions);
@@ -77,9 +79,10 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
       // Add to Firestore - real-time listener will update the UI
       await addTransactionToFirestore(
         user.uid, 
-        Math.abs(transaction.amount), 
+        transaction.amount, // Keep the original amount (positive for income, negative for expense)
         transaction.type,
-        transaction.description
+        transaction.description,
+        transaction.categoryId
       );
       console.log("Transaction added to Firestore successfully");
     } catch (error) {

@@ -46,7 +46,7 @@ export default function Dashboard() {
           <Button 
             variant="outline" 
             onClick={handleLogout}
-            className="flex items-center gap-2 hover:bg-destructive hover:text-destructive-foreground transition-colors"
+            className="flex items-center gap-2"
           >
             <LogOut className="h-4 w-4" />
             Logout
@@ -61,37 +61,36 @@ export default function Dashboard() {
           <ExpensePieChart transactions={transactions} />
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Transaction Form and Recent Activity */}
-          <div className="space-y-6">
-            <Card className="bg-card border animate-fade-in-up">
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2 text-foreground">
-                  <TrendingUp className="h-5 w-5 text-primary" />
-                  Add Transaction
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <TransactionForm />
-              </CardContent>
-            </Card>
-            
-            <RecentActivity transactions={transactions} />
-          </div>
-
-          {/* Right Column - Transaction List */}
-          <div className="lg:col-span-2">
-            <TransactionList />
-          </div>
+        {/* Top Row: Add Transaction + Recent Activity */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Add Transaction */}
+          <Card className="bg-card border animate-fade-in-up">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2 text-foreground">
+                <TrendingUp className="h-5 w-5 text-primary" />
+                Add Transaction
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <TransactionForm />
+            </CardContent>
+          </Card>
+          
+          {/* Recent Activity */}
+          <RecentActivity transactions={transactions} />
         </div>
 
-        {/* Legacy Chart (for now) */}
+        {/* Chart Section - Full Width */}
         {transactions.length > 0 && (
           <div className="animate-fade-in-up">
             <TransactionChart />
           </div>
         )}
+
+        {/* All Transactions - Full Width */}
+        <div className="animate-fade-in-up">
+          <TransactionList />
+        </div>
       </div>
     </div>
   );
