@@ -13,9 +13,13 @@ export default function Dashboard() {
   const { transactions } = useTransactions();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   // Calculate statistics
@@ -40,7 +44,7 @@ export default function Dashboard() {
             </div>
             <div>
               <h1 className="text-2xl font-bold" style={{ color: '#EEEEEE' }}>
-                Welcome back, {user || "Guest"}!
+                Welcome back, {user?.email || "Guest"}!
               </h1>
               <p style={{ color: '#EEEEEE' }}>
                 Manage your finances with ease

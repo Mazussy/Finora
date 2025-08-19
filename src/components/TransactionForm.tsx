@@ -12,29 +12,44 @@ export default function TransactionForm() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState<"income" | "expense">("expense");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Form submitted with:", { description, amount, type });
+    
     if (!description.trim() || !amount.trim()) {
       alert("Please fill in all fields");
       return;
     }
 
     const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount)) {
-      alert("Please enter a valid amount");
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      alert("Please enter a valid amount greater than 0");
       return;
     }
 
-    addTransaction({
-      description: description.trim(),
-      amount: type === "income" ? Math.abs(numericAmount) : -Math.abs(numericAmount),
-      date: new Date().toISOString().split("T")[0],
-    });
+    setIsSubmitting(true);
+    console.log("Starting to add transaction...");
+    
+    try {
+      await addTransaction({
+        description: description.trim(),
+        amount: type === "income" ? Math.abs(numericAmount) : -Math.abs(numericAmount),
+        type,
+        date: new Date().toISOString().split("T")[0],
+      });
 
-    setDescription("");
-    setAmount("");
-    setType("expense");
+      console.log("Transaction added successfully!");
+      setDescription("");
+      setAmount("");
+      setType("expense");
+    } catch (error) {
+      console.error("Error adding transaction:", error);
+      alert(`Failed to add transaction: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -113,11 +128,12 @@ export default function TransactionForm() {
 
           <Button 
             type="submit" 
+            disabled={isSubmitting}
             className="w-full text-white font-medium py-2.5"
             style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}
           >
             <Plus className="h-4 w-4 mr-2" />
-            Add Transaction
+            {isSubmitting ? "Adding..." : "Add Transaction"}
           </Button>
         </form>
       </CardContent>

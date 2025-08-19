@@ -6,7 +6,41 @@ import { Separator } from "@/components/ui/separator";
 import { TrendingUp, TrendingDown, Trash2, Receipt } from "lucide-react";
 
 export default function TransactionList() {
-  const { transactions, deleteTransaction } = useTransactions();
+  const { transactions, deleteTransaction, loading } = useTransactions();
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete this transaction?")) {
+      try {
+        await deleteTransaction(id);
+      } catch (error) {
+        console.error("Error deleting transaction:", error);
+        alert("Failed to delete transaction. Please try again.");
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
+        <CardHeader>
+          <CardTitle className="text-xl flex items-center gap-2" style={{ color: '#EEEEEE' }}>
+            <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
+              <Receipt className="h-4 w-4 text-white" />
+            </div>
+            Loading Transactions...
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-12">
+            <div className="p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center animate-pulse" style={{ backgroundColor: '#222831' }}>
+              <Receipt className="h-8 w-8" style={{ color: '#00ADB5' }} />
+            </div>
+            <p style={{ color: '#EEEEEE' }}>Loading your transactions...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (transactions.length === 0) {
     return (
@@ -85,7 +119,7 @@ export default function TransactionList() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => deleteTransaction(t.id)}
+                    onClick={() => handleDelete(t.id)}
                     className="opacity-0 group-hover:opacity-100 transition-opacity text-red-400 hover:text-red-300 hover:bg-red-500/10"
                   >
                     <Trash2 className="h-4 w-4" />
