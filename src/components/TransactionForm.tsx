@@ -2,45 +2,125 @@ import { useState } from "react";
 import { useTransactions } from "../hooks/useTransaction";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Plus, DollarSign } from "lucide-react";
 
 export default function TransactionForm() {
   const { addTransaction } = useTransactions();
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
+  const [type, setType] = useState<"income" | "expense">("expense");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!description || !amount) return;
+    if (!description.trim() || !amount.trim()) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    const numericAmount = parseFloat(amount);
+    if (isNaN(numericAmount)) {
+      alert("Please enter a valid amount");
+      return;
+    }
 
     addTransaction({
-      description,
-      amount: parseFloat(amount),
+      description: description.trim(),
+      amount: type === "income" ? Math.abs(numericAmount) : -Math.abs(numericAmount),
       date: new Date().toISOString().split("T")[0],
     });
 
     setDescription("");
     setAmount("");
+    setType("expense");
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white p-4 rounded-2xl shadow space-y-4"
-    >
-      <Input
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <Input
-        placeholder="Amount"
-        type="number"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-      />
-      <Button type="submit" className="w-full">
-        Add Transaction
-      </Button>
-    </form>
+    <Card style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
+      <CardHeader>
+        <CardTitle className="text-xl flex items-center gap-2" style={{ color: '#EEEEEE' }}>
+          <div className="p-2 rounded-lg" style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}>
+            <Plus className="h-4 w-4 text-white" />
+          </div>
+          Add Transaction
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="description" style={{ color: '#EEEEEE' }}>
+              Description
+            </Label>
+            <Input
+              id="description"
+              placeholder="Enter transaction description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              style={{ 
+                backgroundColor: '#222831', 
+                borderColor: '#222831', 
+                color: '#EEEEEE' 
+              }}
+              className="placeholder:text-gray-400 focus:border-orange-500"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="type" style={{ color: '#EEEEEE' }}>
+              Type
+            </Label>
+            <Select value={type} onValueChange={(value: "income" | "expense") => setType(value)}>
+              <SelectTrigger style={{ backgroundColor: '#222831', borderColor: '#222831', color: '#EEEEEE' }}>
+                <SelectValue placeholder="Select transaction type" />
+              </SelectTrigger>
+              <SelectContent style={{ backgroundColor: '#393E46', borderColor: '#393E46' }}>
+                <SelectItem value="income" className="text-green-400">
+                  Income (+)
+                </SelectItem>
+                <SelectItem value="expense" className="text-red-400">
+                  Expense (-)
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="amount" style={{ color: '#EEEEEE' }}>
+              Amount
+            </Label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" style={{ color: '#00ADB5' }} />
+              <Input
+                id="amount"
+                placeholder="0.00"
+                type="number"
+                step="0.01"
+                min="0"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                style={{ 
+                  backgroundColor: '#222831', 
+                  borderColor: '#222831', 
+                  color: '#EEEEEE',
+                  paddingLeft: '2.5rem'
+                }}
+                className="placeholder:text-gray-400 focus:border-cyan-500"
+              />
+            </div>
+          </div>
+
+          <Button 
+            type="submit" 
+            className="w-full text-white font-medium py-2.5"
+            style={{ background: 'linear-gradient(135deg, #00ADB5 0%, #00d4dd 100%)' }}
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Transaction
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
